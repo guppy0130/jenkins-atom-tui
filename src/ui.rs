@@ -57,6 +57,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         if let Some(job_idx) = stateful_job.job_state.selected() {
             if !stateful_job.jobs[job_idx].logs.is_empty() {
                 // TODO: fight borrow checker on this clone
+                // TODO: figure out how to handle coloring
                 let mut paragraph = Paragraph::new(stateful_job.jobs[job_idx].logs.clone());
 
                 // allow hitting `w` to wrap the text.

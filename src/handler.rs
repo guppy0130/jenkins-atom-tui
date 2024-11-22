@@ -23,6 +23,8 @@ pub async fn handle_key_events(
         KeyCode::Char('1') => app.set_active_pane(1),
         KeyCode::Char('2') => app.set_active_pane(2),
         KeyCode::Char('3') => app.set_active_pane(3),
+        KeyCode::Char('n') => app.set_active_pane(app.active_pane + 1),
+        KeyCode::Char('p') => app.set_active_pane(app.active_pane - 1),
 
         // don't do anything else with the other keys?
         _ => {}

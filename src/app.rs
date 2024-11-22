@@ -36,7 +36,7 @@ pub struct App {
     /// a status message to display
     pub status: String,
     /// tracks the active pane
-    pub active_pane: u8,
+    pub active_pane: i8,
 
     /// path to JJB config
     jenkins_config_path: PathBuf,
@@ -78,11 +78,8 @@ impl App {
     }
 
     /// sets the active pane
-    pub fn set_active_pane(&mut self, active_pane: u8) {
-        if !(1..=3).contains(&active_pane) {
-            self.status = format!("{} is an invalid pane number", active_pane);
-            return;
-        }
+    pub fn set_active_pane(&mut self, active_pane: i8) {
+        let active_pane = ((active_pane - 1).rem_euclid(3)) + 1;
         self.status = format!("Setting active pane to {}", active_pane);
         self.active_pane = active_pane;
     }

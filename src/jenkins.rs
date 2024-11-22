@@ -166,6 +166,22 @@ impl Display for JenkinsServer {
     }
 }
 
+impl TryFrom<BTreeMap<String, String>> for JenkinsServer {
+    type Error = String;
+
+    fn try_from(value: BTreeMap<String, String>) -> Result<Self, Self::Error> {
+        let url = value.get("url").ok_or("Missing URL")?.to_owned();
+        let user = value.get("user").ok_or("Missing user")?.to_owned();
+        let password = value.get("password").ok_or("Missing password")?.to_owned();
+        Ok(Self {
+            url,
+            user,
+            password,
+            client: None,
+        })
+    }
+}
+
 impl JenkinsServer {
     /// make a request to the Jenkins server with basic auth
     pub async fn request_with_auth(
@@ -206,7 +222,16 @@ pub fn read_jenkins_config_file<P: AsRef<Path>>(
     path: P,
 ) -> Result<BTreeMap<String, JenkinsServer>, Box<dyn Error>> {
     let jenkins_file_content = fs::read_to_string(path)?;
-    let parsed_jenkins_config: BTreeMap<String, JenkinsServer> =
+    let config_with_extras: BTreeMap<String, BTreeMap<String, String>> =
         serde_ini::from_str(&jenkins_file_content)?;
+    let parsed_jenkins_config: BTreeMap<String, JenkinsServer> = config_with_extras
+        .into_iter()
+        .filter_map(|(k, v)| {
+            if let Ok(server) = JenkinsServer::try_from(v) {
+                return Some((k, server));
+            }
+            None
+        })
+        .collect();
     Ok(parsed_jenkins_config)
 }

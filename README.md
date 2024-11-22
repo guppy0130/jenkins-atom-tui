@@ -49,6 +49,8 @@ respectively. Refer to `jenkins.rs` for what strings map to which `BuildState`.
 
 The `Status` pane is read-only and not focusable.
 
-Use `r` to refresh the active pane. Select the active pane with `1`, `2`, or `3`
-keys. `hjkl` or arrow keys to navigate inside a pane. Refer to `handler.rs` for
-the full set of keybinds.
+Select the active pane with `1`, `2`, or `3` keys. Select `[n]ext` or
+`[p]revious` pane.
+
+Use `r` to refresh the active pane. `hjkl` or arrow keys to navigate inside a
+pane. Refer to `handler.rs` for the full set of keybinds.

@@ -207,6 +207,6 @@ pub fn read_jenkins_config_file<P: AsRef<Path>>(
 ) -> Result<BTreeMap<String, JenkinsServer>, Box<dyn Error>> {
     let jenkins_file_content = fs::read_to_string(path)?;
     let parsed_jenkins_config: BTreeMap<String, JenkinsServer> =
-        toml::from_str(&jenkins_file_content)?;
+        serde_ini::from_str(&jenkins_file_content)?;
     Ok(parsed_jenkins_config)
 }
